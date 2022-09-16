@@ -12,7 +12,8 @@ func main() {
 
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go routines.CleanDatabase(&wg)
+	go routines.CleanDatabase()
+	go routines.CleanLogs()
 
 	wg.Wait()
 	log.Println("Exiting Routine Sheduler...")
