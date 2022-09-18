@@ -14,7 +14,6 @@ func CleanLogs(jsonReporter *reporter.JsonReporter) {
 	c := time.NewTicker(time.Duration(utils.EnvToUint32("CleanLogsEvery", 1)) * time.Minute).C
 
 	for now := range c {
-		log.Println(now)
 		log.Println("[ROUTINES] Starting CleanLogs Routine at: " + now.String())
 
 		err := logs.Clean()
