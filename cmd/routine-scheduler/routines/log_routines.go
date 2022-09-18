@@ -5,38 +5,25 @@ import (
 	"log"
 	"time"
 
+	"acme.spa/routine-scheduler/cmd/routine-scheduler/reporter"
 	"acme.spa/routine-scheduler/cmd/routine-scheduler/utils"
 	"acme.spa/routine-scheduler/pkg/logs"
-	"acme.spa/routine-scheduler/pkg/models"
 )
 
-func CleanLogs() {
-	for {
-		time.Sleep(time.Duration(utils.EnvToUint32("CleanLogsEvery", 30)) * time.Minute)
+func CleanLogs(jsonReporter *reporter.JsonReporter) {
+	c := time.NewTicker(time.Duration(utils.EnvToUint32("CleanLogsEvery", 1)) * time.Minute).C
 
-		log.Println("[ROUTINES] Starting CleanLogs Routine...")
+	for now := range c {
+		log.Println(now)
+		log.Println("[ROUTINES] Starting CleanLogs Routine at: " + now.String())
 
-		byteValue, err := utils.OpenAndReadBytes("json_reporter.json")
-
-		if err != nil {
-			log.Println("[ROUTINES] Error in CleanLogs on OpenAndReadBytes: " + err.Error())
-		}
-
-		var jsonReporter models.JsonReporter
-
-		err = json.Unmarshal(byteValue, &jsonReporter)
+		err := logs.Clean()
 
 		if err != nil {
-			log.Println("[ROUTINES] Error in CleanLogs on Unmarshalling: " + err.Error())
+			log.Println("[ROUTINES] error in logs.Clean: " + err.Error())
 		}
 
-		err = logs.Clean()
-
-		if err != nil {
-			log.Println("[ROUTINES] Error In CleanLogs Routine")
-			jsonReporter.LogsCleanRoutine.RunErrors += 1
-		}
-		jsonReporter.LogsCleanRoutine.RunNo += 1
+		jsonReporter.IncrementLogsReporter(err)
 
 		jsonRaw, err := json.Marshal(jsonReporter)
 
