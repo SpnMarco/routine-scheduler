@@ -60,3 +60,22 @@ func OpenReadAndUnmarshall(filePath string, jsonReporter *JsonReporter) (*JsonRe
 
 	return jsonReporter, nil
 }
+
+func CreateDefault() error {
+	var j JsonReporter
+
+	j.DatabaseCleanRoutine.RunNo = 0
+	j.DatabaseCleanRoutine.RunErrors = 0
+	j.LogsCleanRoutine.RunNo = 0
+	j.LogsCleanRoutine.RunErrors = 0
+
+	bytes, err := json.Marshal(&j)
+
+	if err != nil {
+		return err
+	}
+
+	os.WriteFile("json_reporter.json", bytes, 0644)
+
+	return nil
+}

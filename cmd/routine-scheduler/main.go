@@ -20,7 +20,13 @@ func main() {
 	err := json.Unmarshal(bytes, &jsonReporter)
 
 	if err != nil {
-		log.Fatal("Cannot acquire JSON file for reporting routines, error: " + err.Error())
+		log.Println("Cannot acquire JSON file for reporting routines, attempting to create it")
+
+		err := reporter.CreateDefault()
+
+		if err != nil {
+			log.Fatal("Cannot create reporting file, aborting. Err: " + err.Error())
+		}
 	}
 
 	var wg sync.WaitGroup
