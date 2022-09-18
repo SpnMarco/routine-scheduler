@@ -12,6 +12,8 @@ import (
 
 func CleanDatabase() {
 	for {
+		time.Sleep(time.Duration(utils.EnvToUint32("CleanDatabaseEvery", 30)) * time.Minute)
+
 		log.Println("[ROUTINES] Starting CleanDatabase Routine")
 
 		byteValue, err := utils.OpenAndReadBytes("json_reporter.go")
@@ -49,6 +51,5 @@ func CleanDatabase() {
 		}
 
 		log.Println("[ROUTINES] Finished CleanDatabase Routine")
-		time.Sleep(5 * time.Second)
 	}
 }

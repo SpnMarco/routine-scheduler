@@ -9,7 +9,11 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/cmd/routine-scheduler/main.go"
+            "program": "${workspaceFolder}/cmd/routine-scheduler/main.go",
+            "env": {
+                "CleanDatabaseEvery": "1",
+                "CleanLogsEvery": "1"
+            }
         }
     ]
 }

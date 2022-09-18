@@ -12,6 +12,8 @@ import (
 
 func CleanLogs() {
 	for {
+		time.Sleep(time.Duration(utils.EnvToUint32("CleanLogsEvery", 30)) * time.Minute)
+
 		log.Println("[ROUTINES] Starting CleanLogs Routine...")
 
 		byteValue, err := utils.OpenAndReadBytes("json_reporter.json")
@@ -39,16 +41,15 @@ func CleanLogs() {
 		jsonRaw, err := json.Marshal(jsonReporter)
 
 		if err != nil {
-			log.Println("[ROUTINES] Error in CleanDatabaseRoutine on Marshalling: " + err.Error())
+			log.Println("[ROUTINES] Error in CleanLogsRoutine on Marshalling: " + err.Error())
 		}
 
 		err = utils.WriteFile("json_reporter.json", jsonRaw, 0644)
 
 		if err != nil {
-			log.Println("[ROUTINES] Error in CleanDatabaseRoutine on WriteFile: " + err.Error())
+			log.Println("[ROUTINES] Error in CleanLogsRoutine on WriteFile: " + err.Error())
 		}
 
 		log.Println("[ROUTINES] Finished CleanLogs Routine")
-		time.Sleep(5 * time.Second)
 	}
 }
