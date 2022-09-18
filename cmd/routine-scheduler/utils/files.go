@@ -13,8 +13,11 @@ func OpenAndReadBytes(filePath string) ([]byte, error) {
 
 	jsonReporterRaw, err := os.Open(filePath)
 	if err != nil {
-		return nil, err
+		return nil, jsonReporterRaw.Close()
 	}
+
+	defer jsonReporterRaw.Close()
+
 	byteValue, _ := io.ReadAll(jsonReporterRaw)
 	if err != nil {
 		return nil, err
