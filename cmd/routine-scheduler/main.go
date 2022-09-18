@@ -20,7 +20,7 @@ func main() {
 	err := json.Unmarshal(bytes, &jsonReporter)
 
 	if err != nil {
-		log.Println("Cannot acquire JSON file for reporting routines, attempting to create it")
+		log.Println("Cannot acquire JSON file for reporting routines, creating a new one")
 
 		err := reporter.CreateDefault()
 
